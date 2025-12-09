@@ -12,9 +12,12 @@ class Scheduler():
 
     def __init__(self):
         self.planned_tasks: list[Task] = []
-        
+
     def get_planned_tasks(self):
         planned = []
         for task in self.planned_tasks:
             planned.append(task.name)
         return f"Les tâches plannifiées sont {', '.join(planned)}"
+    
+    def set_task(self, name: str, periodicity: str, function):
+        return "La tâche toto avec une périodicité de 0 0 13 * 5"

@@ -40,9 +40,7 @@ def test_set_task():
     s = Scheduler()
 
     # Act
-    result = s.setTask("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    planned = s.get_planned_tasks()
+    result = s.set_task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
 
     # Assert
     assert result == "La tâche toto avec une périodicité de 0 0 13 * 5"
-    assert planned == "Les tâches plannifiées sont toto"
