@@ -25,4 +25,7 @@ class Scheduler():
         return task.get_task()
 
     def delete_task(self, name:str)->str:
-        return"La tâche rihanna a été supprimée"
+        for task in self.planned_tasks:
+            if task.name == name:
+                self.planned_tasks.remove(task)
+                return f"La tâche {name} a été supprimée"
