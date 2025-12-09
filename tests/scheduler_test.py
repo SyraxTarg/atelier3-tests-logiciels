@@ -56,6 +56,24 @@ def test_delete_task():
 
     # Act
     result = s.delete_task("rihanna")
+    planned = s.get_planned_tasks()
 
     # Assert
     assert result == "La tâche rihanna a été supprimée"
+    assert planned == "Les tâches plannifiées sont toto, lala"
+
+
+def test_delete_task_unknown_task():
+    # Arrange
+    s = Scheduler()
+    s.set_task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    s.set_task("lala", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    s.set_task("rihanna", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+
+    # Act
+    result = s.delete_task("madonna")
+    planned = s.get_planned_tasks()
+
+    # Assert
+    assert result == "La tâche madonna n'existe pas"
+    assert planned == "Les tâches plannifiées sont toto, lala, rihanna"

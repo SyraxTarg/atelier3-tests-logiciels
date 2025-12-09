@@ -29,3 +29,5 @@ class Scheduler():
             if task.name == name:
                 self.planned_tasks.remove(task)
                 return f"La tâche {name} a été supprimée"
+
+        return f"La tâche {name} n'existe pas"
