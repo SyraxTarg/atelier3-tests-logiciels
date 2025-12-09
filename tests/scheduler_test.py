@@ -41,6 +41,8 @@ def test_set_task():
 
     # Act
     result = s.set_task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    planned = s.get_planned_tasks()
 
     # Assert
     assert result == "La tâche toto avec une périodicité de 0 0 13 * 5"
+    assert planned == "Les tâches plannifiées sont toto"
