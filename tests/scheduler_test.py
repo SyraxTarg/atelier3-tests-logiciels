@@ -46,3 +46,16 @@ def test_set_task():
     # Assert
     assert result == "La tâche toto avec une périodicité de 0 0 13 * 5"
     assert planned == "Les tâches plannifiées sont toto"
+
+def test_delete_task():
+    # Arrange
+    s = Scheduler()
+    s.set_task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    s.set_task("lala", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    s.set_task("rihanna", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+
+    # Act
+    result = s.delete_task("rihanna")
+
+    # Assert
+    assert result == "La tâche rihanna a été supprimée"
