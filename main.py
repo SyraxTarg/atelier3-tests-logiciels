@@ -11,4 +11,7 @@ class Task():
 class Scheduler():
 
     def __init__(self):
-        self.running_tasks = []
+        self.planned_tasks = []
+        
+    def get_planned_tasks(self):
+        return "Les tâches plannifiées sont t1, t2"
