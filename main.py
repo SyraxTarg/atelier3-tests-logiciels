@@ -11,7 +11,10 @@ class Task():
 class Scheduler():
 
     def __init__(self):
-        self.planned_tasks = []
+        self.planned_tasks: list[Task] = []
         
     def get_planned_tasks(self):
-        return "Les tâches plannifiées sont t1, t2"
+        planned = []
+        for task in self.planned_tasks:
+            planned.append(task.name)
+        return f"Les tâches plannifiées sont {', '.join(planned)}"

@@ -32,4 +32,4 @@ def test_get_planned_tasks():
     result = s.get_planned_tasks()
     
     # Assert
-    assert result == f"Les tâches plannifiées sont t1, t2"
+    assert result == f"Les tâches plannifiées sont yoyo, toto"
