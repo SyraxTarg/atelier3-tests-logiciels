@@ -69,6 +69,18 @@ def test_get_planned_tasks(mock_task_1, mock_task_2):
 
     # Assert
     assert result == "Les tâches plannifiées sont toto, lala"
+    
+
+def test_get_planned_tasks_empty():
+    # Arrange
+    s = Scheduler()
+    s.planned_tasks = []
+
+    # Act
+    result = s.get_planned_tasks()
+
+    # Assert
+    assert result == "Aucune tâche"
 
 
 def test_set_task(mock_task_1):
