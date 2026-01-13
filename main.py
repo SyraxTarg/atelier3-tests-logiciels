@@ -31,3 +31,9 @@ class Scheduler():
                 return f"La tâche {name} a été supprimée"
 
         return f"La tâche {name} n'existe pas"
+    
+    
+    def cron_match(self, value, cron_field):
+        if cron_field == "*":
+            return True
+        return int(value) == int(cron_field)
