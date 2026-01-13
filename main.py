@@ -23,6 +23,8 @@ class Scheduler():
         planned = []
         for task in self.planned_tasks:
             planned.append(task.name)
+        if not planned:
+            return "Aucune tâche"
         return f"Les tâches plannifiées sont {', '.join(planned)}"
 
     def set_task(self, task: Task)->str:
@@ -71,6 +73,6 @@ task2 = Task("task2", "10 14 13 * *", lambda: print(f"Bonjour {__name__}"))
 t.set_task(task)
 t.set_task(task2)
 
-while True:
-    t.update()
-    time.sleep(1)
+# while True:
+#     t.update()
+#     time.sleep(1)
