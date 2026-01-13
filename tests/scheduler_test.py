@@ -123,7 +123,37 @@ def test_cron_match_all():
 
     # Assert
     assert result == True
-    
-    
-    
-    
+
+
+def test_update():
+    # Arrange
+    s = Scheduler()
+    task = Task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    task2 = Task("lala", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    task3 = Task("rihanna", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    s.set_task(task)
+    s.set_task(task2)
+    s.set_task(task3)
+
+    # Act
+    s.update()
+
+    # Assert
+    assert s.cron_match.call_count == 5
+
+
+def test_update_no_task():
+    # Arrange
+    s = Scheduler()
+    task = Task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    task2 = Task("lala", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    task3 = Task("rihanna", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    s.set_task(task)
+    s.set_task(task2)
+    s.set_task(task3)
+
+    # Act
+    s.update()
+
+    # Assert
+    assert s.cron_match.call_count == 0
