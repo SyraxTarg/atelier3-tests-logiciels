@@ -40,7 +40,8 @@ def test_set_task():
     s = Scheduler()
 
     # Act
-    result = s.set_task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    task = Task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    result = s.set_task(task)
     planned = s.get_planned_tasks()
 
     # Assert
@@ -50,9 +51,12 @@ def test_set_task():
 def test_delete_task():
     # Arrange
     s = Scheduler()
-    s.set_task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    s.set_task("lala", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    s.set_task("rihanna", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    task = Task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    task2 = Task("lala", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    task3 = Task("rihanna", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    s.set_task(task)
+    s.set_task(task2)
+    s.set_task(task3)
 
     # Act
     result = s.delete_task("rihanna")
@@ -66,9 +70,12 @@ def test_delete_task():
 def test_delete_task_unknown_task():
     # Arrange
     s = Scheduler()
-    s.set_task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    s.set_task("lala", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    s.set_task("rihanna", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    task = Task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    task2 = Task("lala", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    task3 = Task("rihanna", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
+    s.set_task(task)
+    s.set_task(task2)
+    s.set_task(task3)
 
     # Act
     result = s.delete_task("madonna")

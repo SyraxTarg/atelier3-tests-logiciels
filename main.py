@@ -1,12 +1,13 @@
-class Task():
-
+class Task:
     def __init__(self, name: str, periodicity: str, function):
         self.name = name
         self.periodicity = periodicity
+        self.minute, self.hour, self.day, self.month, self.weekday = periodicity.split()
         self.function = function
+        self.last_run = None
 
     def get_task(self):
-        return f"La tâche {self.name} avec une périodicité de {self.periodicity}"
+        return f"La tâche {self.name} avec une périodicité de {self.minute} {self.hour} {self.day} {self.month} {self.weekday}"
 
 class Scheduler():
 
@@ -19,8 +20,7 @@ class Scheduler():
             planned.append(task.name)
         return f"Les tâches plannifiées sont {', '.join(planned)}"
 
-    def set_task(self, name: str, periodicity: str, function)->str:
-        task = Task(name, periodicity, function)
+    def set_task(self, task: Task)->str:
         self.planned_tasks.append(task)
         return task.get_task()
 
