@@ -1,5 +1,6 @@
 import datetime
 import threading
+import time
 
 
 class Task:
@@ -63,3 +64,13 @@ class Scheduler():
 
             threading.Thread(target=task.function).start()
             task.last_run = (now.year, now.month, now.day, now.hour, now.minute)
+
+t = Scheduler()
+task = Task("task1", "* * * * *", lambda: print(f"hello {__name__}"))
+task2 = Task("task2", "10 14 13 * *", lambda: print(f"Bonjour {__name__}"))
+t.set_task(task)
+t.set_task(task2)
+
+while True:
+    t.update()
+    time.sleep(1)
