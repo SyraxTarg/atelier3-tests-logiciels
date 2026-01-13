@@ -1,4 +1,34 @@
 from main import Scheduler, Task
+import pytest
+from unittest.mock import patch, MagicMock
+
+@pytest.fixture
+def mock_cron_match(mocker):
+    return mocker.patch("main.Scheduler.cron_match")
+
+@pytest.fixture
+def mock_task_1():
+    task = MagicMock()
+    task.name = "toto"
+    task.periodicity = "* * * * *"
+    task.function = lambda: print("hello")
+    return task
+    
+@pytest.fixture
+def mock_task_2():
+    task2 = MagicMock()
+    task2.name = "lala"
+    task2.periodicity = "8 * * * *"
+    task2.function = lambda: print("hello")
+    return task2
+
+@pytest.fixture
+def mock_task_3():
+    task3 = MagicMock()
+    task3.name = "lala"
+    task3.periodicity = "8 * * * *"
+    task3.function = lambda: print("hello")
+    return task3
 
 def test_init_scheduler():
     s = Scheduler()
@@ -125,35 +155,29 @@ def test_cron_match_all():
     assert result == True
 
 
-def test_update():
+def test_update(mock_cron_match, mock_task_1, mock_task_2, mock_task_3):
     # Arrange
     s = Scheduler()
-    task = Task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    task2 = Task("lala", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    task3 = Task("rihanna", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    s.set_task(task)
-    s.set_task(task2)
-    s.set_task(task3)
+    s.planned_tasks = [mock_task_1, mock_task_2, mock_task_3]
+    mock_cron_match.side_effects = [True, True, True, True, True]
+    mock_task_1.return_value = True
+    mock_task_2.return_value = True
+    mock_task_3.return_value = True
 
     # Act
     s.update()
 
     # Assert
-    assert s.cron_match.call_count == 5
+    assert mock_cron_match.call_count == 15
 
 
-def test_update_no_task():
+def test_update_no_task(mock_cron_match):
     # Arrange
     s = Scheduler()
-    task = Task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    task2 = Task("lala", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    task3 = Task("rihanna", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    s.set_task(task)
-    s.set_task(task2)
-    s.set_task(task3)
+    s.planned_tasks = []
 
     # Act
     s.update()
 
     # Assert
-    assert s.cron_match.call_count == 0
+    assert mock_cron_match.call_count == 0

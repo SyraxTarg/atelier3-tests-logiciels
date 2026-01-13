@@ -1,3 +1,5 @@
+import datetime
+
 class Task:
     def __init__(self, name: str, periodicity: str, function):
         self.name = name
@@ -31,9 +33,31 @@ class Scheduler():
                 return f"La tâche {name} a été supprimée"
 
         return f"La tâche {name} n'existe pas"
-    
-    
+
+
     def cron_match(self, value, cron_field):
         if cron_field == "*":
             return True
         return int(value) == int(cron_field)
+
+
+    def update(self):
+        now = datetime.datetime.now()
+
+        for task in self.planned_tasks:
+            if not self.cron_match(now.minute, task.minute):
+                continue
+            if not self.cron_match(now.hour, task.hour):
+                continue
+            if not self.cron_match(now.day, task.day):
+                continue
+            if not self.cron_match(now.month, task.month):
+                continue
+            if not self.cron_match(now.weekday(), task.weekday):
+                continue
+
+            if task.last_run == (now.year, now.month, now.day, now.hour, now.minute):
+                continue
+
+            task.function()
+            task.last_run = (now.year, now.month, now.day, now.hour, now.minute)
