@@ -68,11 +68,13 @@ class Scheduler():
             task.last_run = (now.year, now.month, now.day, now.hour, now.minute)
 
 t = Scheduler()
-task = Task("task1", "* * * * *", lambda: print(f"hello {__name__}"))
-task2 = Task("task2", "10 14 13 * *", lambda: print(f"Bonjour {__name__}"))
+task = Task("Renoir", "* * * * *", lambda: print(f"Gommage"))
+task2 = Task("Végéta", "10 14 13 * *", lambda: print("Final flash"))
+task2 = Task("Frieren", "02 20 * * 3", lambda: print("Zoltrak"))
 t.set_task(task)
 t.set_task(task2)
 
-# while True:
-#     t.update()
-#     time.sleep(1)
+if __name__ == "__main__":
+    while True:
+        t.update()
+        time.sleep(1)
