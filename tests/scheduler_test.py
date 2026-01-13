@@ -7,6 +7,10 @@ def mock_cron_match(mocker):
     return mocker.patch("main.Scheduler.cron_match")
 
 @pytest.fixture
+def mock_get_task(mocker):
+    return mocker.patch("main.Task.get_task")
+
+@pytest.fixture
 def mock_thread_start(mocker):
     return mocker.patch("threading.Thread.start")
 
@@ -14,7 +18,7 @@ def mock_thread_start(mocker):
 def mock_task_1():
     task = MagicMock()
     task.name = "toto"
-    task.periodicity = "* * * * *"
+    task.periodicity = "0 0 13 * 5"
     task.function = lambda: print("hello")
     return task
 
@@ -29,7 +33,7 @@ def mock_task_2():
 @pytest.fixture
 def mock_task_3():
     task3 = MagicMock()
-    task3.name = "lala"
+    task3.name = "rihanna"
     task3.periodicity = "8 * * * *"
     task3.function = lambda: print("hello")
     return task3
@@ -55,42 +59,35 @@ def test_get_task():
     # Assert
     assert result == "La tâche toto avec une périodicité de 0 0 13 * 5"
 
-def test_get_planned_tasks():
+def test_get_planned_tasks(mock_task_1, mock_task_2):
     # Arrange
     s = Scheduler()
-    t1 = Task("yoyo", "0 0 23 * 4", lambda x: print(f"Salut {x}"))
-    t2 = Task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    s.planned_tasks = [t1, t2]
+    s.planned_tasks = [mock_task_1, mock_task_2]
 
     # Act
     result = s.get_planned_tasks()
 
     # Assert
-    assert result == "Les tâches plannifiées sont yoyo, toto"
+    assert result == "Les tâches plannifiées sont toto, lala"
 
 
-def test_set_task():
+def test_set_task(mock_task_1):
     # Arrange
     s = Scheduler()
+    mock_task_1.get_task.return_value = "La tâche toto avec une périodicité de 0 0 13 * 5"
 
     # Act
-    task = Task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    result = s.set_task(task)
+    result = s.set_task(mock_task_1)
     planned = s.get_planned_tasks()
 
     # Assert
     assert result == "La tâche toto avec une périodicité de 0 0 13 * 5"
     assert planned == "Les tâches plannifiées sont toto"
 
-def test_delete_task():
+def test_delete_task(mock_task_1, mock_task_2, mock_task_3):
     # Arrange
     s = Scheduler()
-    task = Task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    task2 = Task("lala", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    task3 = Task("rihanna", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    s.set_task(task)
-    s.set_task(task2)
-    s.set_task(task3)
+    s.planned_tasks = [mock_task_1, mock_task_2, mock_task_3]
 
     # Act
     result = s.delete_task("rihanna")
@@ -101,15 +98,10 @@ def test_delete_task():
     assert planned == "Les tâches plannifiées sont toto, lala"
 
 
-def test_delete_task_unknown_task():
+def test_delete_task_unknown_task(mock_task_1, mock_task_2, mock_task_3):
     # Arrange
     s = Scheduler()
-    task = Task("toto", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    task2 = Task("lala", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    task3 = Task("rihanna", "0 0 13 * 5", lambda x: print(f"Salut {x}"))
-    s.set_task(task)
-    s.set_task(task2)
-    s.set_task(task3)
+    s.planned_tasks = [mock_task_1, mock_task_2, mock_task_3]
 
     # Act
     result = s.delete_task("madonna")
