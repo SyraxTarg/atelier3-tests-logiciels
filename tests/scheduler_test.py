@@ -1,10 +1,14 @@
 from main import Scheduler, Task
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock
 
 @pytest.fixture
 def mock_cron_match(mocker):
     return mocker.patch("main.Scheduler.cron_match")
+
+@pytest.fixture
+def mock_thread_start(mocker):
+    return mocker.patch("threading.Thread.start")
 
 @pytest.fixture
 def mock_task_1():
@@ -13,7 +17,7 @@ def mock_task_1():
     task.periodicity = "* * * * *"
     task.function = lambda: print("hello")
     return task
-    
+
 @pytest.fixture
 def mock_task_2():
     task2 = MagicMock()
@@ -155,7 +159,7 @@ def test_cron_match_all():
     assert result == True
 
 
-def test_update(mock_cron_match, mock_task_1, mock_task_2, mock_task_3):
+def test_update(mock_cron_match, mock_task_1, mock_task_2, mock_task_3, mock_thread_start):
     # Arrange
     s = Scheduler()
     s.planned_tasks = [mock_task_1, mock_task_2, mock_task_3]
@@ -169,9 +173,10 @@ def test_update(mock_cron_match, mock_task_1, mock_task_2, mock_task_3):
 
     # Assert
     assert mock_cron_match.call_count == 15
+    assert mock_thread_start.call_count == 3
 
 
-def test_update_no_task(mock_cron_match):
+def test_update_no_task(mock_cron_match, mock_thread_start):
     # Arrange
     s = Scheduler()
     s.planned_tasks = []
@@ -181,3 +186,4 @@ def test_update_no_task(mock_cron_match):
 
     # Assert
     assert mock_cron_match.call_count == 0
+    assert mock_thread_start.call_count == 0

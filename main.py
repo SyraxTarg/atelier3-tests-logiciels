@@ -1,4 +1,6 @@
 import datetime
+import threading
+
 
 class Task:
     def __init__(self, name: str, periodicity: str, function):
@@ -59,5 +61,5 @@ class Scheduler():
             if task.last_run == (now.year, now.month, now.day, now.hour, now.minute):
                 continue
 
-            task.function()
+            threading.Thread(target=task.function).start()
             task.last_run = (now.year, now.month, now.day, now.hour, now.minute)
