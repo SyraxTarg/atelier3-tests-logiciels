@@ -84,3 +84,46 @@ def test_delete_task_unknown_task():
     # Assert
     assert result == "La tâche madonna n'existe pas"
     assert planned == "Les tâches plannifiées sont toto, lala, rihanna"
+
+
+def test_cron_match():
+    # Arrange
+    minute = 12
+    task_minute = 12
+
+    # Act
+    s = Scheduler()
+    result = s.cron_match(minute, task_minute)
+
+    # Assert
+    assert result == True
+
+
+def test_cron_match_not_match():
+    # Arrange
+    minute = 12
+    task_minute = 15
+
+    # Act
+    s = Scheduler()
+    result = s.cron_match(minute, task_minute)
+
+    # Assert
+    assert result == False
+
+
+def test_cron_match_all():
+    # Arrange
+    minute = 12
+    task_minute = "*"
+
+    # Act
+    s = Scheduler()
+    result = s.cron_match(minute, task_minute)
+
+    # Assert
+    assert result == True
+    
+    
+    
+    
